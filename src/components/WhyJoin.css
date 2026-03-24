@@ -1,0 +1,43 @@
+.why-section {
+  padding: 100px 5%;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.benefit {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.icon {
+  min-width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.glossy-stat-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  padding: 60px;
+  border-radius: 40px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.03);
+}
+
+.glossy-stat-card h3 {
+  font-size: 4rem;
+  font-weight: 900;
+  margin-bottom: 10px;
+}

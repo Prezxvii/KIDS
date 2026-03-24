@@ -1,0 +1,314 @@
+/* ─────────────────────────────────────────────────
+   Navbar.css — KIDS Platform
+───────────────────────────────────────────────── */
+
+.navbar-wrapper {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  max-width: 1200px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  padding: 0 30px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-inner {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ── Logo ── */
+.nav-left { flex: 1; display: flex; justify-content: flex-start; }
+
+.logo { font-size: 1.8rem; font-weight: 900; letter-spacing: -1.5px; }
+
+.red    { color: #EE272E; }
+.blue   { color: #2B88D8; }
+.yellow { color: #FDB813; }
+
+/* ── Center Links ── */
+.nav-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-center li {
+  display: flex;
+  align-items: center;
+  height: 70px;
+}
+
+.nav-center a,
+.dropdown-trigger {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+}
+
+.nav-center a:hover,
+.dropdown-trigger:hover { color: #2B88D8; }
+
+/* ── Right ── */
+.nav-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-login {
+  background: transparent;
+  border: 1px solid #ddd;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-login:hover { background: #f8f8f8; }
+
+.btn-signup {
+  background: #2B88D8;
+  color: white;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(43,136,216,0.2);
+  transition: 0.2s;
+}
+.btn-signup:hover { background: #1e70b8; transform: translateY(-1px); }
+
+/* ── Chevron ── */
+.nav-chevron {
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  flex-shrink: 0;
+}
+.nav-chevron.rotate { transform: rotate(180deg); }
+
+/* ─────────────────────────────────────────────────
+   RESOURCES DROPDOWN
+───────────────────────────────────────────────── */
+.dropdown-wrapper { position: relative; }
+
+/* Outer transparent container — padding-top is the invisible
+   bridge so the cursor can travel from button to menu */
+.dropdown-outer {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1100;
+  padding-top: 10px;   /* ← invisible bridge */
+  min-width: 220px;
+}
+
+/* Inner solid white card */
+.dropdown-menu {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.dropdown-menu li { display: block; width: 100%; }
+
+.dropdown-menu li a {
+  padding: 12px 22px;
+  display: block;
+  color: #1a1a1a;
+  font-size: 0.93rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: #ffffff;
+  transition: background 0.15s, color 0.15s, padding-left 0.15s;
+  text-align: left;
+}
+
+.dropdown-menu li a:hover {
+  background: #f7f8fc;
+  color: #2B88D8;
+  padding-left: 28px;
+}
+
+/* ─────────────────────────────────────────────────
+   USER AVATAR & DROPDOWN
+───────────────────────────────────────────────── */
+.nav-user-wrapper { position: relative; }
+
+.btn-user-avatar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 2px solid #e8edf4;
+  border-radius: 50px;
+  padding: 5px 12px 5px 5px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.87rem;
+  font-weight: 700;
+  color: #111;
+  height: 42px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.btn-user-avatar:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+
+.avatar-initials {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+
+.avatar-name {
+  font-size: 0.87rem;
+  font-weight: 700;
+  color: #111;
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* KEY FIX: padding-top is the invisible bridge between
+   the button and the white card — cursor can travel
+   across it without triggering onMouseLeave */
+.nav-user-wrapper .user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  padding-top: 10px;    /* ← the bridge, transparent */
+  min-width: 220px;
+  z-index: 1100;
+  background: transparent;
+}
+
+/* The white card */
+.user-dropdown-header {
+  background: white;
+  border-radius: 16px 16px 0 0;
+  border: 1.5px solid #e8edf4;
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.02);
+}
+
+.user-dropdown-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+.user-dropdown-name {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #111;
+  margin: 0 0 2px;
+}
+
+.user-dropdown-path {
+  font-size: 0.73rem;
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.user-dropdown-divider {
+  height: 1px;
+  background: #f1f5f9;
+  border-left: 1.5px solid #e8edf4;
+  border-right: 1.5px solid #e8edf4;
+}
+
+.user-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 12px 16px;
+  background: white;
+  border: none;
+  border-left: 1.5px solid #e8edf4;
+  border-right: 1.5px solid #e8edf4;
+  font-family: inherit;
+  font-size: 0.87rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+  box-sizing: border-box;
+}
+
+/* Last item gets bottom border + rounded corners + shadow */
+.user-dropdown-item:last-child {
+  border-bottom: 1.5px solid #e8edf4;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+}
+
+.user-dropdown-item:hover        { background: #f7f8fc; color: #2B88D8; }
+.user-dropdown-item.signout      { color: #EE272E; }
+.user-dropdown-item.signout:hover{ background: #fef2f2; color: #EE272E; }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .nav-center      { display: none; }
+  .navbar-wrapper  { padding: 0 20px; }
+  .avatar-name     { display: none; }
+}

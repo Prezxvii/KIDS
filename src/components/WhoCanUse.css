@@ -1,0 +1,93 @@
+.who-section {
+  padding: 100px 5%;
+  background-color: #fcfcfc;
+}
+
+.who-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.who-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.who-intro {
+  max-width: 700px;
+  margin: 20px auto 0;
+  font-size: 1.1rem;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.who-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.who-card {
+  background: white;
+  padding: 50px 40px;
+  border-radius: 35px;
+  border: 1px solid #f1f5f9;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* The Corner Accent Design */
+.who-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+  opacity: 0.05;
+  transition: 0.4s;
+}
+
+.red-card::before { background-color: #EE272E; }
+.blue-card::before { background-color: #2B88D8; }
+.yellow-card::before { background-color: #FDB813; }
+
+.who-card:hover {
+  transform: translateY(-12px);
+  border-top-width: 4px;
+}
+
+.red-card:hover { border-top-color: #EE272E; box-shadow: 0 30px 60px rgba(238, 39, 46, 0.1); }
+.blue-card:hover { border-top-color: #2B88D8; box-shadow: 0 30px 60px rgba(43, 136, 216, 0.1); }
+.yellow-card:hover { border-top-color: #FDB813; box-shadow: 0 30px 60px rgba(253, 184, 19, 0.1); }
+
+.who-card:hover::before { opacity: 0.2; }
+
+.who-icon-wrapper { margin-bottom: 25px; }
+
+.who-card h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.age-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 25px;
+}
+
+.who-card p {
+  color: #475569;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.red { color: #EE272E; }
+.blue { color: #2B88D8; }
+.yellow { color: #FDB813; }
