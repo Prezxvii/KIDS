@@ -3,6 +3,9 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import './Hero.css';
 
+// 1. You MUST import the video here if it is in src/assets
+import heroVideo from '../assets/hero.mp4'; 
+
 const Hero = () => {
   const navigate = useNavigate();
 
@@ -61,9 +64,10 @@ const Hero = () => {
                 loop 
                 muted 
                 playsInline
+                key="hero-src-fix"
               >
-                {/* Updated to the new unique filename */}
-                <source src="/kids-hero.mp4" type="video/mp4" />
+                {/* 2. Use the imported variable, NOT a string path */}
+                <source src={heroVideo} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
