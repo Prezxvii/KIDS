@@ -6,9 +6,6 @@ import './Hero.css';
 const Hero = () => {
   const navigate = useNavigate();
 
-  // Direct high-quality link from Pexels
-  const pexelsVideoUrl = "https://player.vimeo.com/external/440536412.sd.mp4?s=34a530f283285741f0a76a59530419a4e0078f44&profile_id=164&oauth2_token_id=57447761";
-
   return (
     <section className="hero-container">
       <div className="hero-content">
@@ -64,9 +61,9 @@ const Hero = () => {
                 loop 
                 muted 
                 playsInline
-                key={pexelsVideoUrl} // Ensures video reloads if URL changes
               >
-                <source src={pexelsVideoUrl} type="video/mp4" />
+                {/* Correct path for file in the public folder */}
+                <source src="/hero-video.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
