@@ -62,8 +62,8 @@ const Hero = () => {
                 muted 
                 playsInline
               >
-                {/* Correct path for file in the public folder */}
-                <source src="/hero-video.mp4" type="video/mp4" />
+                {/* Updated to the new unique filename */}
+                <source src="/kids-hero.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
