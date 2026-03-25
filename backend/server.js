@@ -5,68 +5,64 @@ const connectDB  = require('./config/db');
 const authRoutes  = require('./routes/authRoutes');
 const mediaRoutes = require('./routes/mediaRoutes');
 
-// Load environment variables
+// Load environment variables first
 dotenv.config();
 
-// Debugging: Confirm keys are loaded in the Render environment
-console.log('--- Environment Check ---');
-console.log('YOUTUBE_API_KEY:', process.env.YOUTUBE_API_KEY ? '✅' : '❌');
-console.log('NEWS_API_KEY:',    process.env.NEWS_API_KEY    ? '✅' : '❌');
-console.log('MONGO_URI:',       process.env.MONGO_URI       ? '✅' : '❌');
-console.log('-------------------------');
+// Confirm keys loaded
+console.log('ENV check:',
+  'YOUTUBE_API_KEY:', process.env.YOUTUBE_API_KEY ? '✅ loaded' : '❌ MISSING',
+  '| NEWS_API_KEY:',  process.env.NEWS_API_KEY    ? '✅ loaded' : '❌ MISSING',
+  '| MONGO_URI:',     process.env.MONGO_URI        ? '✅ loaded' : '❌ MISSING'
+);
 
 // Connect to MongoDB
 connectDB();
 
 const app = express();
 
-// ─── CORS CONFIGURATION ──────────────────────────────────────────────────────
-// This section allows your Vercel frontend to communicate with this Render backend.
+// ─── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
   'http://127.0.0.1:3000',
-  'https://kids-lemon.vercel.app', // Your specific Vercel URL
+  'https://kids-lemon.vercel.app',    // production frontend
+  'https://kids-o599.onrender.com',   // allow Render self-calls
 ];
 
 app.use(cors({
   origin: (origin, callback) => {
-    // 1. Allow requests with no origin (like Postman or mobile apps)
+    // Allow requests with no origin (Postman, curl, server-to-server)
     if (!origin) return callback(null, true);
-    
-    // 2. Check if the origin is in our allowed list
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      console.error(`CORS Blocked: ${origin}`);
-      return callback(new Error('Not allowed by CORS'));
-    }
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS blocked: ${origin} is not allowed`));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// Handle preflight requests
-app.options('*', cors());
+// Handle preflight for all routes
+app.options(/(.*)/, cors());
 app.use(express.json());
 
-// ─── ROUTES ──────────────────────────────────────────────────────────────────
+// ─── Routes ───────────────────────────────────────────────────────────────────
 app.use('/api/auth',  authRoutes);
 app.use('/api/media', mediaRoutes);
 
-// ─── HEALTH CHECK ─────────────────────────────────────────────────────────────
+// ─── Health check ─────────────────────────────────────────────────────────────
+app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+
 app.get('/', (req, res) => {
   res.json({
-    status: 'Success',
-    message: 'KIDS Platform API is live ✅',
-    timestamp: new Date().toISOString()
+    message: 'KIDS Platform API is running ✅',
+    endpoints: {
+      auth:   '/api/auth/signup',
+      videos: '/api/media/videos?category=Tech',
+      news:   '/api/media/news?topic=NYC+youth+programs&pageSize=15',
+    },
   });
 });
 
-// ─── START SERVER ────────────────────────────────────────────────────────────
+// ─── Start ────────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📡 Accepting requests from: ${allowedOrigins.join(', ')}`);
-});
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
