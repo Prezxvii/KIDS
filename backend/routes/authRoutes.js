@@ -1,14 +1,39 @@
-const express  = require('express');
-const router   = express.Router();
-const { registerUser, loginUser, getMe, updateProfile } = require('../controllers/authController');
+const express = require('express');
+const router = express.Router();
+const { 
+    registerUser, 
+    loginUser, 
+    getMe, 
+    updateProfile 
+} = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 
-// Public routes
+/**
+ * @route   POST /api/auth/signup
+ * @desc    Register a new user
+ * @access  Public
+ */
 router.post('/signup', registerUser);
-router.post('/login',  loginUser);
 
-// Protected routes (require valid JWT)
-router.get('/me',         protect, getMe);
-router.put('/profile',    protect, updateProfile);
+/**
+ * @route   POST /api/auth/login
+ * @desc    Authenticate user & get token
+ * @access  Public
+ */
+router.post('/login', loginUser);
+
+/**
+ * @route   GET /api/auth/me
+ * @desc    Get current user profile
+ * @access  Private
+ */
+router.get('/me', protect, getMe);
+
+/**
+ * @route   PUT /api/auth/profile
+ * @desc    Update user profile
+ * @access  Private
+ */
+router.put('/profile', protect, updateProfile);
 
 module.exports = router;

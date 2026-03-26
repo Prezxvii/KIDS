@@ -5,64 +5,58 @@ const connectDB  = require('./config/db');
 const authRoutes  = require('./routes/authRoutes');
 const mediaRoutes = require('./routes/mediaRoutes');
 
-// Load environment variables first
+// 1. Load environment variables
 dotenv.config();
 
-// Confirm keys loaded
-console.log('ENV check:',
-  'YOUTUBE_API_KEY:', process.env.YOUTUBE_API_KEY ? '✅ loaded' : '❌ MISSING',
-  '| NEWS_API_KEY:',  process.env.NEWS_API_KEY    ? '✅ loaded' : '❌ MISSING',
-  '| MONGO_URI:',     process.env.MONGO_URI        ? '✅ loaded' : '❌ MISSING'
-);
-
-// Connect to MongoDB
+// 2. Connect to MongoDB
+// NOTE: If this fails, the server will crash. Ensure MONGO_URI is in Render Env Vars.
 connectDB();
 
 const app = express();
 
-// ─── CORS ─────────────────────────────────────────────────────────────────────
+// 3. CORS Configuration
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'http://127.0.0.1:3000',
-  'https://kids-lemon.vercel.app',    // production frontend
-  'https://kids-o599.onrender.com',   // allow Render self-calls
+  'https://kids-lemon.vercel.app', // Your Production Frontend
 ];
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (Postman, curl, server-to-server)
+    // Allow requests with no origin (like mobile apps or Postman)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    callback(new Error(`CORS blocked: ${origin} is not allowed`));
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.error(`🚫 CORS blocked for origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// Handle preflight for all routes
-app.options(/(.*)/, cors());
+// Handle preflight requests
+app.options('*', cors());
+
+// 4. Middleware
 app.use(express.json());
 
-// ─── Routes ───────────────────────────────────────────────────────────────────
+// 5. Routes
 app.use('/api/auth',  authRoutes);
 app.use('/api/media', mediaRoutes);
 
-// ─── Health check ─────────────────────────────────────────────────────────────
-app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+// 6. Health Check (Crucial for Render to see the app is "Alive")
+app.get('/health', (req, res) => res.status(200).json({ status: 'active' }));
 
 app.get('/', (req, res) => {
-  res.json({
-    message: 'KIDS Platform API is running ✅',
-    endpoints: {
-      auth:   '/api/auth/signup',
-      videos: '/api/media/videos?category=Tech',
-      news:   '/api/media/news?topic=NYC+youth+programs&pageSize=15',
-    },
-  });
+  res.json({ message: 'KIDS Platform API is Live 🚀' });
 });
 
-// ─── Start ────────────────────────────────────────────────────────────────────
+// 7. Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// We bind to '0.0.0.0' specifically for Render/Cloud environments
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});

@@ -10,20 +10,24 @@ import {
   User, 
   Target, 
   CheckCircle2, 
-  ShieldCheck 
+  ShieldCheck,
+  RefreshCw 
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
 
+// ─── API CONFIGURATION ──────────────────────────────────────────────────────
 const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 const PATHS = ['Sports', 'Tech', 'Arts', 'Business', 'Camps', 'Music'];
 
+// ─── ANIMATION VARIANTS ─────────────────────────────────────────────────────
 const stepVariants = {
-  enter:  (dir) => ({ x: dir > 0 ? 50 : -50, opacity: 0, filter: 'blur(4px)' }),
+  enter: (dir) => ({ x: dir > 0 ? 50 : -50, opacity: 0, filter: 'blur(4px)' }),
   center: { x: 0, opacity: 1, filter: 'blur(0px)', transition: { duration: 0.3, ease: 'easeOut' } },
-  exit:   (dir) => ({ x: dir < 0 ? 50 : -50, opacity: 0, filter: 'blur(4px)', transition: { duration: 0.2, ease: 'easeIn' } }),
+  exit: (dir) => ({ x: dir < 0 ? 50 : -50, opacity: 0, filter: 'blur(4px)', transition: { duration: 0.2, ease: 'easeIn' } }),
 };
 
+// ─── PASSWORD STRENGTH COMPONENT ────────────────────────────────────────────
 const PasswordStrength = ({ password }) => {
   const score = [
     password.length >= 6,
@@ -36,10 +40,12 @@ const PasswordStrength = ({ password }) => {
   const labels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
   const colors = ['', '#ef4444', '#f97316', '#eab308', '#22c55e', '#10b981'];
 
+  if (!password) return null;
+
   return (
     <div className="password-strength">
       <div className="strength-bars">
-        {[1,2,3,4,5].map(i => (
+        {[1, 2, 3, 4, 5].map(i => (
           <div key={i} className="strength-bar"
             style={{ background: i <= score ? colors[score] : '#e2e8f0' }} />
         ))}
@@ -51,6 +57,7 @@ const PasswordStrength = ({ password }) => {
   );
 };
 
+// ─── MAIN SIGNUP COMPONENT ──────────────────────────────────────────────────
 const SignUp = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
@@ -67,7 +74,10 @@ const SignUp = () => {
     agreed: false,
   });
 
-  const update = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
+  const update = (field, value) => {
+    setError('');
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const goNext = () => {
     setError('');
@@ -88,7 +98,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.password || formData.password.length < 6) return setError('Password must be 6+ chars.');
+    if (!formData.password || formData.password.length < 6) return setError('Password must be 6+ characters.');
     if (!formData.agreed) return setError('Please agree to terms.');
 
     setError('');
@@ -109,8 +119,11 @@ const SignUp = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Registration failed');
 
+      // Success
       localStorage.setItem('kids_token', data.token);
+      localStorage.setItem('kids_user', JSON.stringify(data));
       navigate('/profile', { replace: true });
+      
     } catch (err) {
       setError(err.message || 'Server error. Try again.');
     } finally {
@@ -124,6 +137,8 @@ const SignUp = () => {
   return (
     <div className="auth-page">
       <motion.div className="auth-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} layout>
+        
+        {/* Progress Bar */}
         <div className="progress-container">
           <motion.div className="progress-bar" animate={{ width: `${(step / 3) * 100}%` }} />
         </div>
@@ -138,8 +153,9 @@ const SignUp = () => {
           </motion.div>
         </div>
 
+        {/* Step Indicator Dots */}
         <div className="step-dots">
-          {[1,2,3].map(i => (
+          {[1, 2, 3].map(i => (
             <div key={i} className={`step-dot ${i === step ? 'active' : i < step ? 'done' : ''}`}>
               {i < step && <CheckCircle2 size={12} strokeWidth={3} />}
             </div>
@@ -149,6 +165,7 @@ const SignUp = () => {
         <motion.h2 layout>{titles[step - 1]}</motion.h2>
         <p className="auth-subtitle">{subtitles[step - 1]}</p>
 
+        {/* Error Messaging */}
         <AnimatePresence>
           {error && (
             <motion.div className="auth-error-banner" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
@@ -161,6 +178,7 @@ const SignUp = () => {
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div key={step} custom={direction} variants={stepVariants} initial="enter" animate="center" exit="exit" className="step-content-wrapper">
               
+              {/* STEP 1: Personal Info */}
               {step === 1 && (
                 <div className="step-inner">
                   <div className="modern-input-wrapper">
@@ -175,6 +193,7 @@ const SignUp = () => {
                 </div>
               )}
 
+              {/* STEP 2: Path Selection */}
               {step === 2 && (
                 <div className="step-inner">
                   <div className="path-grid">
@@ -191,6 +210,7 @@ const SignUp = () => {
                 </div>
               )}
 
+              {/* STEP 3: Password & Agreement */}
               {step === 3 && (
                 <form onSubmit={handleSubmit} className="step-inner">
                   <div className="signup-summary">
@@ -212,7 +232,13 @@ const SignUp = () => {
                   <div className="dual-btns">
                     <button type="button" className="btn-secondary" onClick={goBack}>Back</button>
                     <button type="submit" className="btn-main-action" disabled={loading}>
-                      {loading ? <span className="btn-spinner" /> : <><ShieldCheck size={18} /> Finish</>}
+                      {loading ? (
+                        <span className="btn-loading">
+                          <RefreshCw className="btn-spinner animate-spin" size={16} /> Creating Account...
+                        </span>
+                      ) : (
+                        <><ShieldCheck size={18} /> Finish</>
+                      )}
                     </button>
                   </div>
                 </form>
