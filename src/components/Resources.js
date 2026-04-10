@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import './Resources.css';
 
-// ─── Backend API base (proxy — no keys exposed in frontend) ──────────────────
+
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // ─── News Topics ──────────────────────────────────────────────────────────────
@@ -20,7 +20,7 @@ const NEWS_TOPICS = [
 ];
 
 
-// ─── Fallback News — every image specifically matched to article subject ───────
+
 const FALLBACK_NEWS = {
   'NYC youth programs opportunities empowerment': [
     { title: "SYEP 2025: NYC Opens 100,000 Paid Summer Job Slots for Youth Ages 14–24", description: "NYC's Summer Youth Employment Program — the nation's largest — is accepting applications now. Earn minimum wage for 6 weeks of real career experience.", source: { name: "Gothamist" }, publishedAt: "2026-03-22T08:14:00Z", url: "https://gothamist.com", urlToImage: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=700&q=80" },
@@ -684,7 +684,7 @@ const Resources = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
                 >
-                  <Sparkles size={11} /> Curated from Gothamist, Chalkbeat, Bronx Times, WNYC &amp; more · Live news coming soon
+                
                 </motion.div>
               )}
             </motion.div>
